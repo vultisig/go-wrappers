@@ -2,9 +2,10 @@ package session_test
 
 import (
 	"fmt"
-	session "go-wrapper/go-schnorr/sessions"
-	testHelper "go-wrapper/go-schnorr/test"
 	"testing"
+
+	session "github.com/vultisig/go-wrapper/go-schnorr/sessions"
+	testHelper "github.com/vultisig/go-wrapper/go-schnorr/test"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -116,8 +117,8 @@ func TestSchnorrKeyshare(t *testing.T) {
 			// chain code
 
 			cc, err := session.SchnorrKeyshareChainCode(shares[0])
-            assert.NoError(t, err)
-            assert.NotEmpty(t, cc)
+			assert.NoError(t, err)
+			assert.NotEmpty(t, cc)
 
 			ids := testHelper.PrepareIDSlice(tc.input.T)
 

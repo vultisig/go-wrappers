@@ -1,12 +1,12 @@
 package session_test
 
 import (
+	"crypto/ed25519"
 	"fmt"
-	session "go-wrapper/go-schnorr/sessions"
-	testHelper "go-wrapper/go-schnorr/test"
 	"testing"
 
-	"crypto/ed25519"
+	session "github.com/vultisig/go-wrapper/go-schnorr/sessions"
+	testHelper "github.com/vultisig/go-wrapper/go-schnorr/test"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -230,7 +230,7 @@ func TestSign(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			//t.Logf("Name: %s\nT: %d\nN: %d", tc.name, tc.input.T, tc.input.N)
+			// t.Logf("Name: %s\nT: %d\nN: %d", tc.name, tc.input.T, tc.input.N)
 			keygenShares, err := testHelper.RunSchnorrKeygen(tc.input.T, tc.input.N)
 
 			assert.NoError(t, err)

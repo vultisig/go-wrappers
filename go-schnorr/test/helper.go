@@ -2,8 +2,9 @@ package test
 
 import (
 	"fmt"
-	session "go-wrapper/go-schnorr/sessions"
 	"strings"
+
+	session "github.com/vultisig/go-wrapper/go-schnorr/sessions"
 )
 
 type TestInput struct {

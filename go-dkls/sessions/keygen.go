@@ -19,9 +19,10 @@ package session
 */
 import "C"
 import (
-	"go-wrapper/go-dkls/errors"
 	"runtime"
 	"unsafe"
+
+	"github.com/vultisig/go-wrapper/go-dkls/errors"
 )
 
 // DklsKeygenSetupMsgNew creates a setup message for key generation.

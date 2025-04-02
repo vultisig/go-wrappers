@@ -18,9 +18,10 @@ package session
 */
 import "C"
 import (
-	"go-wrapper/go-dkls/errors"
 	"runtime"
 	"unsafe"
+
+	"github.com/vultisig/go-wrapper/go-dkls/errors"
 )
 
 // DklsKeyshareFromBytes provides a keyshare handle from a byte buffer.

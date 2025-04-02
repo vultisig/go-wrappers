@@ -7,10 +7,11 @@ package session
 import "C"
 
 import (
-	"go-wrapper/go-schnorr/errors"
 	"runtime"
 	"strings"
 	"unsafe"
+
+	"github.com/vultisig/go-wrapper/go-schnorr/errors"
 )
 
 func SchnorrQcSetupMsgNew(keyshare Handle, threshold int, ids []string, oldParties []int, newParties []int) ([]byte, error) {

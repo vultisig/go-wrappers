@@ -19,9 +19,10 @@ package session
 */
 import "C"
 import (
-	"go-wrapper/go-schnorr/errors"
 	"runtime"
 	"unsafe"
+
+	"github.com/vultisig/go-wrapper/go-schnorr/errors"
 )
 
 // SchnorrKeygenSetupMsgNew creates a setup message for key generation.

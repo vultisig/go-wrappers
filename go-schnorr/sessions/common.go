@@ -3,7 +3,6 @@
 package session
 
 /*
-#cgo LDFLAGS: -L ../../includes -Wl,-rpath,../../includes -lgoschnorr
 #include "../../includes/go-schnorr.h"
 #include <stdlib.h>
 */

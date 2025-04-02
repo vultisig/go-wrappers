@@ -3,10 +3,11 @@ package session_test
 import (
 	"encoding/hex"
 	"fmt"
-	session "go-wrapper/go-dkls/sessions"
-	testHelper "go-wrapper/go-dkls/test"
-	schnorr_session "go-wrapper/go-schnorr/sessions"
 	"testing"
+
+	session "github.com/vultisig/go-wrapper/go-dkls/sessions"
+	testHelper "github.com/vultisig/go-wrapper/go-dkls/test"
+	schnorr_session "github.com/vultisig/go-wrapper/go-schnorr/sessions"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -528,7 +529,7 @@ func TestDklsKeyMigrateSessionFromSetupFlow(t *testing.T) {
 			assert.NotEmpty(t, setup)
 
 			publickey, err := hex.DecodeString("02eba32793892022121314aed023df242292d313cb657f6f69016d90b6cfc92d33")
-			rootchain := []byte{1,0,2,3,4,5,6,7,8,9,1,0,2,3,4,5,6,7,8,9,1,0,2,3,4,5,6,7,8,9,1,2}
+			rootchain := []byte{1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2}
 
 			ui := make([][]byte, 3)
 			ui[0], err = hex.DecodeString("3B6661CC3A28C174AF9D0FDD966E9F9D9D2A96682A504E1E9165D700BDC47809")

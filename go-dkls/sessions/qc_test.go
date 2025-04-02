@@ -1,9 +1,10 @@
 package session_test
 
 import (
-	session "go-wrapper/go-dkls/sessions"
-	testHelper "go-wrapper/go-dkls/test"
 	"testing"
+
+	session "github.com/vultisig/go-wrapper/go-dkls/sessions"
+	testHelper "github.com/vultisig/go-wrapper/go-dkls/test"
 )
 
 func RunQcLoop(t *testing.T, parties []P) ([]session.Handle, error) {
