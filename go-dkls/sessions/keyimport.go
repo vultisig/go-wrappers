@@ -14,10 +14,11 @@ package session
 import "C"
 
 import (
-	"github.com/vultisig/go-wrapper/go-dkls/errors"
 	"runtime"
 	"strings"
 	"unsafe"
+
+	"github.com/vultisig/go-wrapper/go-dkls/errors"
 )
 
 // DklsKeyImportInitiatorNew creates a key import receiver session and generates a setup message for
