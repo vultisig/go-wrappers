@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	session "github.com/vultisig/go-wrapper/go-schnorr/sessions"
+	session "github.com/vultisig/go-wrappers/go-schnorr/sessions"
 )
 
 type TestInput struct {

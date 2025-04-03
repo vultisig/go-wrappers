@@ -23,7 +23,7 @@ import (
 	"strings"
 	"unsafe"
 
-	"github.com/vultisig/go-wrapper/go-dkls/errors"
+	"github.com/vultisig/go-wrappers/go-dkls/errors"
 )
 
 // DklsKeyExportReceiverNew creates a key export receiver session and generate setup message for

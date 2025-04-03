@@ -3,8 +3,8 @@ package session_test
 import (
 	"testing"
 
-	sessions "github.com/vultisig/go-wrapper/go-dkls/sessions"
-	testHelper "github.com/vultisig/go-wrapper/go-dkls/test"
+	sessions "github.com/vultisig/go-wrappers/go-dkls/sessions"
+	testHelper "github.com/vultisig/go-wrappers/go-dkls/test"
 
 	"github.com/stretchr/testify/assert"
 )

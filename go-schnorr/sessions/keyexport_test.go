@@ -3,8 +3,8 @@ package session_test
 import (
 	"testing"
 
-	sessions "github.com/vultisig/go-wrapper/go-schnorr/sessions"
-	testHelper "github.com/vultisig/go-wrapper/go-schnorr/test"
+	sessions "github.com/vultisig/go-wrappers/go-schnorr/sessions"
+	testHelper "github.com/vultisig/go-wrappers/go-schnorr/test"
 
 	"github.com/stretchr/testify/assert"
 )

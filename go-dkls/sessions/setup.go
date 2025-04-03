@@ -16,7 +16,7 @@ import (
 	"runtime"
 	"unsafe"
 
-	"github.com/vultisig/go-wrapper/go-dkls/errors"
+	"github.com/vultisig/go-wrappers/go-dkls/errors"
 )
 
 // DklsDecodeKeyID decodes a key ID from a setup message.

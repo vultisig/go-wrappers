@@ -18,7 +18,7 @@ import (
 	"strings"
 	"unsafe"
 
-	"github.com/vultisig/go-wrapper/go-dkls/errors"
+	"github.com/vultisig/go-wrappers/go-dkls/errors"
 )
 
 // DklsKeyImportInitiatorNew creates a key import receiver session and generates a setup message for

@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"testing"
 
-	dkls_session "github.com/vultisig/go-wrapper/go-dkls/sessions"
-	dkls_testHelper "github.com/vultisig/go-wrapper/go-dkls/test"
-	session "github.com/vultisig/go-wrapper/go-schnorr/sessions"
-	testHelper "github.com/vultisig/go-wrapper/go-schnorr/test"
+	dkls_session "github.com/vultisig/go-wrappers/go-dkls/sessions"
+	dkls_testHelper "github.com/vultisig/go-wrappers/go-dkls/test"
+	session "github.com/vultisig/go-wrappers/go-schnorr/sessions"
+	testHelper "github.com/vultisig/go-wrappers/go-schnorr/test"
 
 	"github.com/stretchr/testify/assert"
 )

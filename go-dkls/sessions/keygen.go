@@ -22,7 +22,7 @@ import (
 	"runtime"
 	"unsafe"
 
-	"github.com/vultisig/go-wrapper/go-dkls/errors"
+	"github.com/vultisig/go-wrappers/go-dkls/errors"
 )
 
 // DklsKeygenSetupMsgNew creates a setup message for key generation.

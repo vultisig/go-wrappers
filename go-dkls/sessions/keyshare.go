@@ -21,7 +21,7 @@ import (
 	"runtime"
 	"unsafe"
 
-	"github.com/vultisig/go-wrapper/go-dkls/errors"
+	"github.com/vultisig/go-wrappers/go-dkls/errors"
 )
 
 // DklsKeyshareFromBytes provides a keyshare handle from a byte buffer.

@@ -3,8 +3,8 @@ package session_test
 import (
 	"testing"
 
-	session "github.com/vultisig/go-wrapper/go-schnorr/sessions"
-	testHelper "github.com/vultisig/go-wrapper/go-schnorr/test"
+	session "github.com/vultisig/go-wrappers/go-schnorr/sessions"
+	testHelper "github.com/vultisig/go-wrappers/go-schnorr/test"
 )
 
 func RunQcLoop(t *testing.T, parties []P) ([]session.Handle, error) {

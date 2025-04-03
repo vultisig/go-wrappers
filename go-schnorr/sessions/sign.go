@@ -22,7 +22,7 @@ import (
 	"runtime"
 	"unsafe"
 
-	"github.com/vultisig/go-wrapper/go-schnorr/errors"
+	"github.com/vultisig/go-wrappers/go-schnorr/errors"
 )
 
 // SchnorrSignSetupMsgNew generates a new signing setup message

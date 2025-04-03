@@ -17,7 +17,7 @@ import (
 	"strings"
 	"unsafe"
 
-	"github.com/vultisig/go-wrapper/go-schnorr/errors"
+	"github.com/vultisig/go-wrappers/go-schnorr/errors"
 )
 
 // SchnorrKeyImportInitiatorNew creates a key import receiver session and generates a setup message for

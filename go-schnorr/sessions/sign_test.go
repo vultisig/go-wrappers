@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	session "github.com/vultisig/go-wrapper/go-schnorr/sessions"
-	testHelper "github.com/vultisig/go-wrapper/go-schnorr/test"
+	session "github.com/vultisig/go-wrappers/go-schnorr/sessions"
+	testHelper "github.com/vultisig/go-wrappers/go-schnorr/test"
 
 	"github.com/stretchr/testify/assert"
 )

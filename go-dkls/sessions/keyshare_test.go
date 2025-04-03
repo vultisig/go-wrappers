@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	session "github.com/vultisig/go-wrapper/go-dkls/sessions"
-	testHelper "github.com/vultisig/go-wrapper/go-dkls/test"
+	session "github.com/vultisig/go-wrappers/go-dkls/sessions"
+	testHelper "github.com/vultisig/go-wrappers/go-dkls/test"
 
 	"github.com/stretchr/testify/assert"
 )

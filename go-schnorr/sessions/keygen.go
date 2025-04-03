@@ -22,7 +22,7 @@ import (
 	"runtime"
 	"unsafe"
 
-	"github.com/vultisig/go-wrapper/go-schnorr/errors"
+	"github.com/vultisig/go-wrappers/go-schnorr/errors"
 )
 
 // SchnorrKeygenSetupMsgNew creates a setup message for key generation.

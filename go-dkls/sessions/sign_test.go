@@ -6,8 +6,8 @@ import (
 	"math/big"
 	"testing"
 
-	session "github.com/vultisig/go-wrapper/go-dkls/sessions"
-	testHelper "github.com/vultisig/go-wrapper/go-dkls/test"
+	session "github.com/vultisig/go-wrappers/go-dkls/sessions"
+	testHelper "github.com/vultisig/go-wrappers/go-dkls/test"
 
 	"github.com/ethereum/go-ethereum/crypto/secp256k1"
 	"github.com/stretchr/testify/assert"

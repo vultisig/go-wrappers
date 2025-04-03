@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unsafe"
 
-	"github.com/vultisig/go-wrapper/go-schnorr/errors"
+	"github.com/vultisig/go-wrappers/go-schnorr/errors"
 )
 
 func SchnorrQcSetupMsgNew(keyshare Handle, threshold int, ids []string, oldParties []int, newParties []int) ([]byte, error) {

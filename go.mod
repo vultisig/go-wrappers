@@ -1,4 +1,4 @@
-module github.com/vultisig/go-wrapper
+module github.com/vultisig/go-wrappers
 
 go 1.22
 

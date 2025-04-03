@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	session "github.com/vultisig/go-wrapper/go-dkls/sessions"
+	session "github.com/vultisig/go-wrappers/go-dkls/sessions"
 )
 
 type TestInput struct {
