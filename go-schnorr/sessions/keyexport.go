@@ -19,10 +19,11 @@ package session
 */
 import "C"
 import (
-	"go-wrapper/go-schnorr/errors"
 	"runtime"
 	"strings"
 	"unsafe"
+
+	"github.com/vultisig/go-wrappers/go-schnorr/errors"
 )
 
 // SchnorrKeyExportReceiverNew creates a key export receiver session and generate setup message for

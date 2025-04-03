@@ -1,8 +1,8 @@
 package session_test
 
 import (
-	sessions "go-wrapper/go-dkls/sessions"
-	testHelper "go-wrapper/go-dkls/test"
+	sessions "github.com/vultisig/go-wrappers/go-dkls/sessions"
+	testHelper "github.com/vultisig/go-wrappers/go-dkls/test"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

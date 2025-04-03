@@ -15,9 +15,10 @@ package session
 */
 import "C"
 import (
-	"go-wrapper/go-dkls/errors"
 	"runtime"
 	"unsafe"
+
+	"github.com/vultisig/go-wrappers/go-dkls/errors"
 )
 
 // DklsPresignFromBytes converts serialized pre-signature data into a pre-signature handle.

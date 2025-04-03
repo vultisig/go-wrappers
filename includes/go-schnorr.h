@@ -684,6 +684,8 @@ enum lib_error schnorr_key_exporter(struct Handle share,
 
  * `private_key`
 
+ * `root_chain` - optional root chain code
+
  * `threshold`
 
  * `ids` - human readable party identifiers.
@@ -702,6 +704,7 @@ enum lib_error schnorr_key_exporter(struct Handle share,
 
  */
 enum lib_error schnorr_key_import_initiator_new(const struct go_slice *private_key,
+                                                const struct go_slice *root_chain,
                                                 uint8_t threshold,
                                                 const struct go_slice *ids,
                                                 struct tss_buffer *setup_msg,

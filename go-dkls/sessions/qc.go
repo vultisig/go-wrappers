@@ -7,10 +7,11 @@ package session
 import "C"
 
 import (
-	"go-wrapper/go-dkls/errors"
 	"runtime"
 	"strings"
 	"unsafe"
+
+	"github.com/vultisig/go-wrappers/go-dkls/errors"
 )
 
 func DklsQcSetupMsgNew(keyshare Handle, threshold int, ids []string, oldParties []int, newParties []int) ([]byte, error) {

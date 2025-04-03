@@ -13,10 +13,11 @@ package session
 */
 import "C"
 import (
-	"go-wrapper/go-schnorr/errors"
 	"runtime"
 	"strings"
 	"unsafe"
+
+	"github.com/vultisig/go-wrappers/go-schnorr/errors"
 )
 
 // SchnorrKeyImportInitiatorNew creates a key import receiver session and generates a setup message for
@@ -31,7 +32,7 @@ import (
 //   - Handle: handle which will store the allocated session.
 //   - []byte: a byte slice containing the setup message.
 //   - error: an error if the Rust function call fails or if any other issue occurs.
-func SchnorrKeyImportInitiatorNew(privateKey []byte, threshold uint8, ids []string) (Handle, []byte, error) {
+func SchnorrKeyImportInitiatorNew(privateKey []byte, rootchain []byte, threshold uint8, ids []string) (Handle, []byte, error) {
 	pinner := new(runtime.Pinner)
 	defer pinner.Unpin()
 
@@ -45,10 +46,17 @@ func SchnorrKeyImportInitiatorNew(privateKey []byte, threshold uint8, ids []stri
 	cSetupMsg := C.tss_buffer{}
 	defer C.tss_buffer_free(&cSetupMsg)
 
+	cRootChain := (*C.go_slice)(nil)
+	if rootchain != nil {
+		cRootChain = (*C.go_slice)(unsafe.Pointer(&rootchain))
+		pinner.Pin(&rootchain[0])
+	}
+
 	cHnd := C.Handle{}
 
 	res := C.schnorr_key_import_initiator_new(
 		cPrivateKey,
+		cRootChain,
 		cThreshold,
 		cIDs,
 		&cSetupMsg,

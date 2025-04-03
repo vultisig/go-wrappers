@@ -2,8 +2,9 @@ package test
 
 import (
 	"fmt"
-	session "go-wrapper/go-dkls/sessions"
 	"strings"
+
+	session "github.com/vultisig/go-wrappers/go-dkls/sessions"
 )
 
 type TestInput struct {

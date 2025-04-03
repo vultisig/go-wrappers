@@ -3,11 +3,12 @@ package session_test
 import (
 	"encoding/hex"
 	"fmt"
-	dkls_session "go-wrapper/go-dkls/sessions"
-	dkls_testHelper "go-wrapper/go-dkls/test"
-	session "go-wrapper/go-schnorr/sessions"
-	testHelper "go-wrapper/go-schnorr/test"
 	"testing"
+
+	dkls_session "github.com/vultisig/go-wrappers/go-dkls/sessions"
+	dkls_testHelper "github.com/vultisig/go-wrappers/go-dkls/test"
+	session "github.com/vultisig/go-wrappers/go-schnorr/sessions"
+	testHelper "github.com/vultisig/go-wrappers/go-schnorr/test"
 
 	"github.com/stretchr/testify/assert"
 )

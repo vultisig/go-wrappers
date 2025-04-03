@@ -20,9 +20,10 @@ package session
 */
 import "C"
 import (
-	"go-wrapper/go-dkls/errors"
 	"runtime"
 	"unsafe"
+
+	"github.com/vultisig/go-wrappers/go-dkls/errors"
 )
 
 // DklsSignSetupMsgNew generates a new signing setup message

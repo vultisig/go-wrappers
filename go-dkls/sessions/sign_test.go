@@ -3,10 +3,11 @@ package session_test
 import (
 	"crypto/ecdsa"
 	"fmt"
-	session "go-wrapper/go-dkls/sessions"
-	testHelper "go-wrapper/go-dkls/test"
 	"math/big"
 	"testing"
+
+	session "github.com/vultisig/go-wrappers/go-dkls/sessions"
+	testHelper "github.com/vultisig/go-wrappers/go-dkls/test"
 
 	"github.com/ethereum/go-ethereum/crypto/secp256k1"
 	"github.com/stretchr/testify/assert"
@@ -231,7 +232,7 @@ func TestSign(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			//t.Logf("Name: %s\nT: %d\nN: %d", tc.name, tc.input.T, tc.input.N)
+			// t.Logf("Name: %s\nT: %d\nN: %d", tc.name, tc.input.T, tc.input.N)
 			keygenShares, err := testHelper.RunKeygen(tc.input.T, tc.input.N)
 
 			assert.NoError(t, err)

@@ -14,10 +14,11 @@ package session
 import "C"
 
 import (
-	"go-wrapper/go-dkls/errors"
 	"runtime"
 	"strings"
 	"unsafe"
+
+	"github.com/vultisig/go-wrappers/go-dkls/errors"
 )
 
 // DklsKeyImportInitiatorNew creates a key import receiver session and generates a setup message for
@@ -25,6 +26,7 @@ import (
 //
 // Parameters:
 //   - privateKey: []byte - a byte slice containing the private key.
+//   - rootChain: []byte - an optional byte slice contaning root chain code.
 //   - threshold: uint8 - threshold
 //   - ids: []string - human readable party identifiers.
 //
@@ -32,7 +34,7 @@ import (
 //   - Handle: handle which will store the allocated session.
 //   - []byte: a byte slice containing the setup message.
 //   - error: an error if the Rust function call fails or if any other issue occurs.
-func DklsKeyImportInitiatorNew(privateKey []byte, threshold uint8, ids []string) (Handle, []byte, error) {
+func DklsKeyImportInitiatorNew(privateKey []byte, rootChain []byte, threshold uint8, ids []string) (Handle, []byte, error) {
 	pinner := runtime.Pinner{}
 	defer pinner.Unpin()
 
@@ -46,10 +48,17 @@ func DklsKeyImportInitiatorNew(privateKey []byte, threshold uint8, ids []string)
 	setupMsg := C.tss_buffer{}
 	defer C.tss_buffer_free(&setupMsg)
 
+	cRootChain := (*C.go_slice)(nil)
+	if rootChain != nil {
+		cRootChain = (*C.go_slice)(unsafe.Pointer(&rootChain))
+		pinner.Pin(&rootChain[0])
+	}
+
 	handle := C.Handle{}
 
 	rc := C.dkls_key_import_initiator_new(
 		cPrivateKey,
+		cRootChain,
 		C.uint8_t(threshold),
 		cIds,
 		&setupMsg,

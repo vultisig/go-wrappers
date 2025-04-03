@@ -19,10 +19,11 @@ package session
 */
 import "C"
 import (
-	"go-wrapper/go-dkls/errors"
 	"runtime"
 	"strings"
 	"unsafe"
+
+	"github.com/vultisig/go-wrappers/go-dkls/errors"
 )
 
 // DklsKeyExportReceiverNew creates a key export receiver session and generate setup message for

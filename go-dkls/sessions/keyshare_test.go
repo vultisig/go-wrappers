@@ -2,9 +2,10 @@ package session_test
 
 import (
 	"fmt"
-	session "go-wrapper/go-dkls/sessions"
-	testHelper "go-wrapper/go-dkls/test"
 	"testing"
+
+	session "github.com/vultisig/go-wrappers/go-dkls/sessions"
+	testHelper "github.com/vultisig/go-wrappers/go-dkls/test"
 
 	"github.com/stretchr/testify/assert"
 )

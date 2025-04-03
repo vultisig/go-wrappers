@@ -13,9 +13,10 @@ package session
 */
 import "C"
 import (
-	"go-wrapper/go-dkls/errors"
 	"runtime"
 	"unsafe"
+
+	"github.com/vultisig/go-wrappers/go-dkls/errors"
 )
 
 // DklsDecodeKeyID decodes a key ID from a setup message.

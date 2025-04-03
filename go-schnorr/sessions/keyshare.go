@@ -16,9 +16,10 @@ package session
 */
 import "C"
 import (
-	"go-wrapper/go-schnorr/errors"
 	"runtime"
 	"unsafe"
+
+	"github.com/vultisig/go-wrappers/go-schnorr/errors"
 )
 
 // SchnorrKeyshareFromBytes provides a keyshare handle from a byte buffer.
