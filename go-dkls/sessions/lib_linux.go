@@ -3,8 +3,7 @@
 package session
 
 /*
-#cgo CFLAGS: -I../../includes
-#cgo LDFLAGS: -L../../includes/linux -llibgodkls
+#cgo LDFLAGS: -L../../includes/linux -lgodkls
 #include "../../includes/go-dkls.h"
 #include <stdlib.h>
 */
