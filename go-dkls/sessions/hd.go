@@ -8,7 +8,7 @@
 package session
 
 /*
-#include "../../include/go-dkls.h"
+#include "../../includes/go-dkls.h"
 #include <stdlib.h>
 */
 import "C"
