@@ -79,7 +79,6 @@ func TestDklsSignSessionFlow(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			keygenShares, err := testHelper.RunKeygen(tc.input.T, tc.input.N)
@@ -228,11 +227,10 @@ func TestSign(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			// t.Logf("Name: %s\nT: %d\nN: %d", tc.name, tc.input.T, tc.input.N)
+			//t.Logf("Name: %s\nT: %d\nN: %d", tc.name, tc.input.T, tc.input.N)
 			keygenShares, err := testHelper.RunKeygen(tc.input.T, tc.input.N)
 
 			assert.NoError(t, err)
@@ -278,7 +276,7 @@ func TestSign(t *testing.T) {
 			preHandles := make([]session.Handle, 0, len(pre))
 
 			// convert pre-sign bytes into pre-sign handle object
-			for i := 0; i < len(pre); i++ {
+			for i := range pre {
 				hnd, err := session.DklsPresignFromBytes(pre[i])
 
 				assert.NoError(t, err)
@@ -325,7 +323,6 @@ func TestSign2x5(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			keygenShares, err := testHelper.RunKeygen(tc.input.T, tc.input.N)

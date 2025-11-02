@@ -5,9 +5,12 @@ package errors
 #include <stdlib.h>
 */
 import "C"
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
-var libErrorMessages = map[C.lib_error]string{
+var libErrorMessages = map[C.schnorr_lib_error]string{
 	C.LIB_OK:                          "ok",
 	C.LIB_INVALID_HANDLE:              "Invalid Handle, not found in the map",
 	C.LIB_HANDLE_IN_USE:               "Handle In Use, the handle is already in use",
@@ -37,8 +40,8 @@ var libErrorMessages = map[C.lib_error]string{
 }
 
 func MapLibError(err int) error {
-	if errMsg, found := libErrorMessages[C.lib_error(err)]; found {
-		return fmt.Errorf(errMsg)
+	if errMsg, found := libErrorMessages[C.schnorr_lib_error(err)]; found {
+		return errors.New(errMsg)
 	}
 
 	return fmt.Errorf("unknown error: %v", err)

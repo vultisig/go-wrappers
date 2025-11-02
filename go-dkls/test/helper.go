@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"strings"
+	"testing"
 
 	session "github.com/vultisig/go-wrappers/go-dkls/sessions"
 )
@@ -45,7 +46,7 @@ func RunKeygenLoop(parties []Participant) ([]session.Handle, error) {
 					break
 				}
 
-				for idx := 0; idx < n; idx++ {
+				for idx := range n {
 					receiver, err := session.DklsKeygenSessionMessageReceiver(
 						party.Session,
 						buf,
@@ -115,6 +116,53 @@ func RunKeygen(t int, n int) ([]session.Handle, error) {
 	}
 
 	return RunKeygenLoop(parties)
+}
+
+func RunHD(t *testing.T, shares []session.Handle, chainPath string) ([]session.Handle, error) {
+	n := len(shares)
+	if n == 0 {
+		return nil, nil
+	}
+
+	keyID, err := session.DklsKeyshareKeyID(shares[0])
+	if err != nil {
+		return nil, err
+	}
+
+	ids := PrepareIDSlice(n)
+
+	setup, err := session.DklsHdSetupMsgNew(
+		keyID,
+		([]byte)(chainPath),
+		ids,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	parties := make([]Participant, n)
+
+	for i, share := range shares {
+		id := fmt.Sprintf("p%d", i+1)
+
+		sessionHandle, err := session.DklsHdSessionFromSetup(
+			setup,
+			([]byte)(id),
+			share,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		parties[i] = Participant{
+			Session: sessionHandle,
+			ID:      id,
+		}
+	}
+
+	t.Logf("created sessions")
+
+	return runHdLoop(t, parties)
 }
 
 func RunSign(shares []session.Handle, msg []byte) ([][]byte, error) {
@@ -272,7 +320,7 @@ func runSignLoop(parties []Participant) ([][]byte, error) {
 					break
 				}
 
-				for idx := 0; idx < t; idx++ {
+				for idx := range t {
 					receiver, err := session.DklsSignSessionMessageReceiver(
 						party.Session,
 						buf,
@@ -305,6 +353,76 @@ func runSignLoop(parties []Participant) ([][]byte, error) {
 					}
 
 					shares = append(shares, sign)
+				}
+			}
+		}
+	}
+
+	return shares, nil
+}
+
+func runHdLoop(t *testing.T, parties []Participant) ([]session.Handle, error) {
+	msgq := make(map[string][][]byte)
+
+	shares := make([]session.Handle, 0, len(parties))
+
+	for len(shares) != len(parties) {
+
+		for _, party := range parties {
+			for {
+				buf, err := session.DklsHdSessionOutputMessage(party.Session)
+				if err != nil {
+					t.Errorf("output message error %v", err)
+					return nil, err
+				}
+
+				if buf == nil {
+					break
+				}
+
+				for idx := range parties {
+					receiver, err := session.DklsHdSessionMessageReceiver(
+						party.Session,
+						buf,
+						idx,
+					)
+					if err != nil {
+						t.Errorf("msg receiver error %v", err)
+						return nil, err
+					}
+
+					if receiver == "" {
+						break
+					}
+
+					t.Logf("send message %v -> %v %d", party.ID, receiver, len(buf))
+					msgq[receiver] = append(msgq[receiver], buf)
+				}
+			}
+		}
+
+		for _, party := range parties {
+			queue := msgq[party.ID]
+			msgq[party.ID] = nil
+
+			for _, msg := range queue {
+				finished, err := session.DklsHdSessionInputMessage(
+					party.Session,
+					msg,
+				)
+				if err != nil {
+					return nil, err
+				}
+
+				if finished {
+					share, err := session.DklsHdSessionFinish(party.Session)
+					if err != nil {
+						return nil, err
+					}
+
+					shares = append(shares, share)
+
+					break
 				}
 			}
 		}
