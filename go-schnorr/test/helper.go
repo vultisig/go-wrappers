@@ -45,7 +45,7 @@ func RunSchnorrKeygenLoop(parties []Participant) ([]session.Handle, error) {
 					break
 				}
 
-				for idx := 0; idx < n; idx++ {
+				for idx := range n {
 					receiver, err := session.SchnorrKeygenSessionMessageReceiver(
 						party.Session,
 						buf,
@@ -181,7 +181,7 @@ func runSchnorrSignLoop(parties []Participant) ([][]byte, error) {
 					break
 				}
 
-				for idx := 0; idx < t; idx++ {
+				for idx := range t {
 					receiver, err := session.SchnorrSignSessionMessageReceiver(
 						party.Session,
 						buf,
