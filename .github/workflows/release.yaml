@@ -1,0 +1,103 @@
+name: Release Go Wrappers
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g., v1.0.0)"
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Run tests
+        run: |
+          # Skip tests that require TSS libraries on CI
+          go build ./...
+
+      - name: Package Linux amd64 libraries
+        run: |
+          cd includes
+          tar -czvf ../go-wrappers-linux-amd64.tar.gz linux-amd64/ go-dkls.h go-schnorr.h
+          echo "Created go-wrappers-linux-amd64.tar.gz"
+
+      - name: Package Linux arm64 libraries
+        run: |
+          cd includes
+          tar -czvf ../go-wrappers-linux-arm64.tar.gz linux-arm64/ go-dkls.h go-schnorr.h
+          echo "Created go-wrappers-linux-arm64.tar.gz"
+
+      - name: Package Darwin libraries
+        run: |
+          cd includes
+          tar -czvf ../go-wrappers-darwin-arm64.tar.gz darwin/ go-dkls.h go-schnorr.h
+          echo "Created go-wrappers-darwin-arm64.tar.gz"
+
+      - name: Upload Release Assets
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} \
+            go-wrappers-linux-amd64.tar.gz \
+            go-wrappers-linux-arm64.tar.gz \
+            go-wrappers-darwin-arm64.tar.gz \
+            --clobber
+
+      - name: Upload Assets (Manual)
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create release if it doesn't exist
+          gh release create ${{ inputs.tag }} \
+            go-wrappers-linux-amd64.tar.gz \
+            go-wrappers-linux-arm64.tar.gz \
+            go-wrappers-darwin-arm64.tar.gz \
+            --title "Go Wrappers ${{ inputs.tag }}" \
+            --notes "Pre-compiled TSS libraries for Go.
+
+## Platform Support
+
+| Platform | Architecture | Status |
+|----------|-------------|--------|
+| Linux | amd64 (x86_64) | ✅ Supported |
+| Linux | arm64 (aarch64) | ✅ Supported |
+| macOS | arm64 (Apple Silicon) | ✅ Supported |
+| macOS | amd64 (Intel) | ❌ Not yet available |
+
+## Usage
+
+Download the appropriate archive for your platform and extract to your project or system library path.
+
+\`\`\`bash
+# Linux amd64
+tar -xzf go-wrappers-linux-amd64.tar.gz -C /usr/local/lib/dkls
+
+# Linux arm64
+tar -xzf go-wrappers-linux-arm64.tar.gz -C /usr/local/lib/dkls
+
+# macOS arm64
+tar -xzf go-wrappers-darwin-arm64.tar.gz -C /usr/local/lib/dkls
+\`\`\`
+" \
+            || gh release upload ${{ inputs.tag }} \
+              go-wrappers-linux-amd64.tar.gz \
+              go-wrappers-linux-arm64.tar.gz \
+              go-wrappers-darwin-arm64.tar.gz \
+              --clobber
