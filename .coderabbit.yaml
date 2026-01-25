@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: 'en-US'
+early_access: false
+reviews:
+  profile: 'chill'
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: true
+  sequence_diagram: false
+  auto_review:
+    enabled: true
+    drafts: false
+  path_instructions:
+    - path: '**/*.go'
+      instructions: |
+        Review Guidelines for Go code:
+        - Focus on correctness, security, and maintainability
+        - Check for proper error handling patterns
+        - Verify resource cleanup (defer statements)
+        - Look for potential race conditions in concurrent code
+        - Pay attention to CGO interactions and memory safety
+chat:
+  auto_reply: true
