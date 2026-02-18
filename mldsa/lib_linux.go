@@ -3,7 +3,7 @@
 package mldsa
 
 /*
-#cgo LDFLAGS: -L../includes/linux -Wl,-rpath,../includes/linux -lvscore
+#cgo LDFLAGS: -L../includes/linux -Wl,-rpath,../includes/linux -lvscore -lm
 #include "../includes/vs-core.h"
 #include <stdlib.h>
 */
