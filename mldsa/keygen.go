@@ -2,17 +2,10 @@ package mldsa
 
 // #include "../includes/vs-core.h"
 // #include <stdlib.h>
-//
-// typedef struct result {
-//      lib_error  error;
-//      tss_buffer buffer;
-//      Handle     hnd;
-//      int32_t    finished;
-// } result;
-//
-// #define slice_ptr(s) ((s).len > 0 ? &(s) : NULL)
+// #include "vs-core-result.h"
 //
 // static result new_keygen_setup(
+//      MldsaSecurityLevel level,
 //      int threshold,
 //      go_slice key_id,
 //      go_slice ids
@@ -20,7 +13,8 @@ package mldsa
 //      result res = {0};
 //
 //      res.error = mldsa_keygen_setupmsg_new(
-//          threshold,
+//          level,
+//          (uint32_t)threshold,
 //          slice_ptr(key_id),
 //          slice_ptr(ids),
 //          &res.buffer
@@ -30,12 +24,14 @@ package mldsa
 // }
 //
 // static result keygen_from_setup(
+//      MldsaSecurityLevel level,
 //      go_slice setup,
 //      go_slice id
 // ) {
 //      result res = {0};
 //
 //      res.error = mldsa_keygen_session_from_setup(
+//          level,
 //          slice_ptr(setup),
 //          slice_ptr(id),
 //          &res.hnd
@@ -104,11 +100,13 @@ import (
 )
 
 func MldsaKeygenSetupMsgNew(
+	level SecurityLevel,
 	threshold int,
 	keyID []byte,
 	ids []byte,
 ) ([]byte, error) {
 	res := C.new_keygen_setup(
+		C.MldsaSecurityLevel(level),
 		C.int(threshold),
 		newGoSlice(keyID),
 		newGoSlice(ids),
@@ -131,10 +129,12 @@ func MldsaKeygenSetupMsgNew(
 }
 
 func MldsaKeygenSessionFromSetup(
+	level SecurityLevel,
 	setup []byte,
 	id []byte,
 ) (Handle, error) {
 	res := C.keygen_from_setup(
+		C.MldsaSecurityLevel(level),
 		newGoSlice(setup),
 		newGoSlice(id),
 	)

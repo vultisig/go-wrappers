@@ -2,14 +2,7 @@ package mldsa
 
 // #include "../includes/vs-core.h"
 // #include <stdlib.h>
-// typedef struct result {
-//      lib_error  error;
-//      tss_buffer buffer;
-//      Handle     hnd;
-//      int32_t    finished;
-// } result;
-//
-// #define slice_ptr(s) ((s).len > 0 ? &(s) : NULL)
+// #include "vs-core-result.h"
 //
 // static result share_from_bytes(go_slice bytes) {
 //     result res = {0};

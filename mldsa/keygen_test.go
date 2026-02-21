@@ -5,6 +5,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/vultisig/go-wrappers/mldsa"
 )
 
@@ -23,7 +25,7 @@ func PrepareIDSlice(n int) []byte {
 }
 
 func TestKeygenSetupNew(t *testing.T) {
-	mldsa.MldsaKeygenSetupMsgNew(2, nil, nil)
+	_, _ = mldsa.MldsaKeygenSetupMsgNew(mldsa.MlDsa87, 2, nil, PrepareIDSlice(2))
 }
 
 func RunKeygenLoop(parties []Participant) ([]mldsa.Handle, error) {
@@ -88,12 +90,16 @@ func RunKeygenLoop(parties []Participant) ([]mldsa.Handle, error) {
 	return shares, nil
 }
 
-func RunKeygen(t int, n int) ([]mldsa.Handle, error) {
+// RunKeygen runs DKG for the given security level and (threshold, n). Returns keyshare handles.
+func RunKeygen(t *testing.T, level mldsa.SecurityLevel, threshold int, n int) ([]mldsa.Handle, error) {
 	ids := PrepareIDSlice(n)
 
-	setupMsg, err := mldsa.MldsaKeygenSetupMsgNew(t, nil, ids)
-	if err != nil {
-		return nil, err
+	setupMsg, err := mldsa.MldsaKeygenSetupMsgNew(level, threshold, nil, ids)
+	assert.NoError(t, err)
+	for p := range n {
+		name, err := mldsa.MldsaDecodePartyName(setupMsg, p)
+		assert.NoError(t, err)
+		assert.Equal(t, name, fmt.Appendf(nil, "p%d", p+1))
 	}
 
 	parties := make([]Participant, n)
@@ -102,7 +108,7 @@ func RunKeygen(t int, n int) ([]mldsa.Handle, error) {
 		id := fmt.Sprintf("p%d", i)
 		bytesID := ([]byte)(id)
 
-		sessionHandle, err := mldsa.MldsaKeygenSessionFromSetup(setupMsg, bytesID)
+		sessionHandle, err := mldsa.MldsaKeygenSessionFromSetup(level, setupMsg, bytesID)
 		if err != nil {
 			return nil, err
 		}
@@ -117,7 +123,7 @@ func RunKeygen(t int, n int) ([]mldsa.Handle, error) {
 }
 
 func TestKeygen_2x2(t *testing.T) {
-	_, err := RunKeygen(2, 2)
+	_, err := RunKeygen(t, mldsa.MlDsa87, 2, 2)
 
 	if err != nil {
 		t.Errorf("unexpected error %v", err)
@@ -125,8 +131,68 @@ func TestKeygen_2x2(t *testing.T) {
 }
 
 func TestKeygen_2x3(t *testing.T) {
-	_, err := RunKeygen(2, 3)
+	_, err := RunKeygen(t, mldsa.MlDsa87, 2, 3)
+	if err != nil {
+		t.Errorf("unexpected error %v", err)
+	}
+}
 
+func TestKeygen_3x3(t *testing.T) {
+	_, err := RunKeygen(t, mldsa.MlDsa87, 3, 3)
+	if err != nil {
+		t.Errorf("unexpected error %v", err)
+	}
+}
+func TestKeygen_Level44_2x2(t *testing.T) {
+	_, err := RunKeygen(t, mldsa.MlDsa44, 2, 2)
+	if err != nil {
+		t.Errorf("unexpected error %v", err)
+	}
+}
+func TestKeygen_Level44_2x3(t *testing.T) {
+	_, err := RunKeygen(t, mldsa.MlDsa44, 2, 3)
+	if err != nil {
+		t.Errorf("unexpected error %v", err)
+	}
+}
+func TestKeygen_Level44_3x3(t *testing.T) {
+	_, err := RunKeygen(t, mldsa.MlDsa44, 3, 3)
+	if err != nil {
+		t.Errorf("unexpected error %v", err)
+	}
+}
+func TestKeygen_Level65_2x2(t *testing.T) {
+	_, err := RunKeygen(t, mldsa.MlDsa65, 2, 2)
+	if err != nil {
+		t.Errorf("unexpected error %v", err)
+	}
+}
+func TestKeygen_Level65_2x3(t *testing.T) {
+	_, err := RunKeygen(t, mldsa.MlDsa65, 2, 3)
+	if err != nil {
+		t.Errorf("unexpected error %v", err)
+	}
+}
+func TestKeygen_Level65_3x3(t *testing.T) {
+	_, err := RunKeygen(t, mldsa.MlDsa65, 3, 3)
+	if err != nil {
+		t.Errorf("unexpected error %v", err)
+	}
+}
+func TestKeygen_Level87_2x2(t *testing.T) {
+	_, err := RunKeygen(t, mldsa.MlDsa87, 2, 2)
+	if err != nil {
+		t.Errorf("unexpected error %v", err)
+	}
+}
+func TestKeygen_Level87_2x3(t *testing.T) {
+	_, err := RunKeygen(t, mldsa.MlDsa87, 2, 3)
+	if err != nil {
+		t.Errorf("unexpected error %v", err)
+	}
+}
+func TestKeygen_Level87_3x3(t *testing.T) {
+	_, err := RunKeygen(t, mldsa.MlDsa87, 3, 3)
 	if err != nil {
 		t.Errorf("unexpected error %v", err)
 	}

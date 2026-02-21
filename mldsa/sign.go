@@ -2,17 +2,10 @@ package mldsa
 
 // #include "../includes/vs-core.h"
 // #include <stdlib.h>
-//
-// typedef struct result {
-//      lib_error  error;
-//      tss_buffer buffer;
-//      Handle     hnd;
-//      int32_t    finished;
-// } result;
-//
-// #define slice_ptr(s) ((s).len > 0 ? &(s) : NULL)
+// #include "vs-core-result.h"
 //
 // static result new_sign_setup(
+//      MldsaSecurityLevel level,
 //      go_slice key_id,
 //      go_slice chain_path,
 //      go_slice message_hash,
@@ -21,6 +14,7 @@ package mldsa
 //      result res = {0};
 //
 //      res.error = mldsa_sign_setupmsg_new(
+//          level,
 //          slice_ptr(key_id),
 //          slice_ptr(chain_path),
 //          slice_ptr(message_hash),
@@ -32,6 +26,7 @@ package mldsa
 // }
 //
 // static result sign_from_setup(
+//      MldsaSecurityLevel level,
 //      go_slice setup,
 //      go_slice id,
 //      Handle share
@@ -39,6 +34,7 @@ package mldsa
 //      result res = {0};
 //
 //      res.error = mldsa_sign_session_from_setup(
+//          level,
 //          slice_ptr(setup),
 //          slice_ptr(id),
 //          share,
@@ -108,12 +104,14 @@ import (
 )
 
 func MldsaSignSetupMsgNew(
+	level SecurityLevel,
 	keyID []byte,
 	chainPath string,
 	messageHash []byte,
 	ids []byte,
 ) ([]byte, error) {
 	res := C.new_sign_setup(
+		C.MldsaSecurityLevel(level),
 		newGoSlice(keyID),
 		newGoSlice([]byte(chainPath)),
 		newGoSlice(messageHash),
@@ -137,11 +135,13 @@ func MldsaSignSetupMsgNew(
 }
 
 func MldsaSignSessionFromSetup(
+	level SecurityLevel,
 	setup []byte,
 	id []byte,
 	share Handle,
 ) (Handle, error) {
 	res := C.sign_from_setup(
+		C.MldsaSecurityLevel(level),
 		newGoSlice(setup),
 		newGoSlice(id),
 		cHandle(share),

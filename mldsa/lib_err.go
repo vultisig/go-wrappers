@@ -9,7 +9,7 @@ import (
 
 var RejectSamplingError = errors.New("reject sampling")
 
-var libErrorMessages = map[C.lib_error]error{
+var libErrorMessages = map[C.mldsa_lib_error]error{
 	C.LIB_INVALID_HANDLE:              errors.New("invalid Handle, not found in the map"),
 	C.LIB_HANDLE_IN_USE:               errors.New("handle In Use, the handle is already in use"),
 	C.LIB_INVALID_HANDLE_TYPE:         errors.New("invalid Handle Type, the handle is not of the expected type"),
@@ -27,7 +27,7 @@ var libErrorMessages = map[C.lib_error]error{
 	C.LIB_REJSAMPLING:                 RejectSamplingError,
 }
 
-func mapLibError(err C.lib_error) error {
+func mapLibError(err C.mldsa_lib_error) error {
 	if err == 0 {
 		return nil
 	}

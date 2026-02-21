@@ -12,8 +12,15 @@ import (
 	"unsafe"
 )
 
-// GoLang representation of C.Handle
+// Handle is a session or keyshare handle from the C library.
 type Handle int32
+// SecurityLevel is the ML-DSA security level (44, 65, or 87). Must match C enum MldsaSecurityLevel.
+type SecurityLevel int32
+const (
+	MlDsa44 SecurityLevel = 44
+	MlDsa65 SecurityLevel = 65
+	MlDsa87 SecurityLevel = 87
+)
 
 func freeTssBuffer(buffer C.tss_buffer) {
 	C.free_tss_buffer(buffer)

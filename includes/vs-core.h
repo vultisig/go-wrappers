@@ -9,7 +9,17 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-enum lib_error
+#ifdef __cplusplus
+namespace mldsa {
+#endif  // __cplusplus
+
+typedef enum MldsaSecurityLevel {
+  MlDsa44 = 44,
+  MlDsa65 = 65,
+  MlDsa87 = 87,
+} MldsaSecurityLevel;
+
+enum mldsa_lib_error
 #ifdef __cplusplus
   : uintptr_t
 #endif // __cplusplus
@@ -40,7 +50,10 @@ enum lib_error
   LIB_ABORT_PROTOCOL_PARTY_1 = 200,
 };
 #ifndef __cplusplus
-typedef uintptr_t lib_error;
+#ifndef MLDSA_LIB_ERROR_DEFINED
+#define MLDSA_LIB_ERROR_DEFINED
+typedef enum mldsa_lib_error mldsa_lib_error;
+#endif
 #endif // __cplusplus
 
 typedef struct tss_buffer {
@@ -89,10 +102,11 @@ void tss_buffer_free(struct tss_buffer *buf);
  * `LIB_NULL_PTR` - A required pointer is null.
  * `LIB_SETUP_MESSAGE_VALIDATION` - Setup message validation failed.
  */
-lib_error mldsa_keygen_setupmsg_new(uint32_t threshold,
-                                    const struct go_slice *key_id,
-                                    const struct go_slice *ids,
-                                    struct tss_buffer *setup_msg);
+mldsa_lib_error mldsa_keygen_setupmsg_new(enum MldsaSecurityLevel level,
+                                          uint32_t threshold,
+                                          const struct go_slice *key_id,
+                                          const struct go_slice *ids,
+                                          struct tss_buffer *setup_msg);
 
 /*
  Create a key generation session from an encoded setup message.
@@ -115,9 +129,10 @@ lib_error mldsa_keygen_setupmsg_new(uint32_t threshold,
  * `LIB_HANDLE_IN_USE` - `hnd` is not a null handle.
 
  */
-lib_error mldsa_keygen_session_from_setup(const struct go_slice *setup,
-                                          const struct go_slice *id,
-                                          struct Handle *hnd);
+mldsa_lib_error mldsa_keygen_session_from_setup(enum MldsaSecurityLevel level,
+                                                const struct go_slice *setup,
+                                                const struct go_slice *id,
+                                                struct Handle *hnd);
 
 /*
  Apply an inbound message to a keygen session state machine.
@@ -139,9 +154,9 @@ lib_error mldsa_keygen_session_from_setup(const struct go_slice *setup,
  * `LIB_INVALID_HANDLE_TYPE` - `session` has the wrong type.
  * `LIB_INVALID_SESSION_STATE` - Session mutex is poisoned.
  */
-lib_error mldsa_keygen_session_input_message(struct Handle session,
-                                             const struct go_slice *message,
-                                             int32_t *finished);
+mldsa_lib_error mldsa_keygen_session_input_message(struct Handle session,
+                                                   const struct go_slice *message,
+                                                   int32_t *finished);
 
 /*
  Fetch the next outbound message from a keygen session.
@@ -165,7 +180,8 @@ lib_error mldsa_keygen_session_input_message(struct Handle session,
  * `LIB_INVALID_SESSION_STATE` - Session mutex is poisoned.
 
  */
-lib_error mldsa_keygen_session_output_message(struct Handle session, struct tss_buffer *message);
+mldsa_lib_error mldsa_keygen_session_output_message(struct Handle session,
+                                                    struct tss_buffer *message);
 
 /*
  Resolve the receiver for a message index.
@@ -191,10 +207,10 @@ lib_error mldsa_keygen_session_output_message(struct Handle session, struct tss_
  * `LIB_INVALID_HANDLE` - `session` is invalid.
  * `LIB_INVALID_HANDLE_TYPE` - `session` has the wrong type.
  */
-lib_error mldsa_keygen_session_message_receiver(struct Handle session,
-                                                const struct go_slice *message,
-                                                uint32_t index,
-                                                struct tss_buffer *receiver);
+mldsa_lib_error mldsa_keygen_session_message_receiver(struct Handle session,
+                                                      const struct go_slice *message,
+                                                      uint32_t index,
+                                                      struct tss_buffer *receiver);
 
 /*
  Finish the session and collect the generated key share.
@@ -226,7 +242,7 @@ lib_error mldsa_keygen_session_message_receiver(struct Handle session,
  * `LIB_KEYGEN_ERROR` - Key generation failed.
 
  */
-lib_error mldsa_keygen_session_finish(struct Handle session, struct Handle *keyshare);
+mldsa_lib_error mldsa_keygen_session_finish(struct Handle session, struct Handle *keyshare);
 
 /*
  Deallocate a keygen session handle and associated memory.
@@ -247,7 +263,7 @@ lib_error mldsa_keygen_session_finish(struct Handle session, struct Handle *keys
  * `LIB_HANDLE_IN_USE` - The session is currently checked out.
 
  */
-lib_error mldsa_keygen_session_free(struct Handle session);
+mldsa_lib_error mldsa_keygen_session_free(struct Handle session);
 
 /*
  Decode a keyshare from serialized bytes.
@@ -267,7 +283,7 @@ lib_error mldsa_keygen_session_free(struct Handle session);
  * `LIB_SERIALIZATION_ERROR` - Failed to decode the keyshare.
  * `LIB_HANDLE_IN_USE` - `hnd` is not a null handle.
  */
-lib_error mldsa_keyshare_from_bytes(const struct go_slice *buf, struct Handle *hnd);
+mldsa_lib_error mldsa_keyshare_from_bytes(const struct go_slice *buf, struct Handle *hnd);
 
 /*
  Serialize a keyshare to bytes.
@@ -287,7 +303,7 @@ lib_error mldsa_keyshare_from_bytes(const struct go_slice *buf, struct Handle *h
  * `LIB_INVALID_HANDLE` - `share` is invalid.
  * `LIB_INVALID_HANDLE_TYPE` - `share` has the wrong type.
  */
-lib_error mldsa_keyshare_to_bytes(struct Handle share, struct tss_buffer *buf);
+mldsa_lib_error mldsa_keyshare_to_bytes(struct Handle share, struct tss_buffer *buf);
 
 /*
  Extract the public key from a keyshare.
@@ -307,7 +323,7 @@ lib_error mldsa_keyshare_to_bytes(struct Handle share, struct tss_buffer *buf);
  * `LIB_INVALID_HANDLE` - `share` is invalid.
  * `LIB_INVALID_HANDLE_TYPE` - `share` has the wrong type.
  */
-lib_error mldsa_keyshare_public_key(struct Handle share, struct tss_buffer *buf);
+mldsa_lib_error mldsa_keyshare_public_key(struct Handle share, struct tss_buffer *buf);
 
 /*
  Extract the key id from a keyshare.
@@ -327,7 +343,7 @@ lib_error mldsa_keyshare_public_key(struct Handle share, struct tss_buffer *buf)
  * `LIB_INVALID_HANDLE` - `share` is invalid.
  * `LIB_INVALID_HANDLE_TYPE` - `share` has the wrong type.
  */
-lib_error mldsa_keyshare_key_id(struct Handle share, struct tss_buffer *buf);
+mldsa_lib_error mldsa_keyshare_key_id(struct Handle share, struct tss_buffer *buf);
 
 /*
  Free a keyshare handle allocated by this library.
@@ -345,7 +361,7 @@ lib_error mldsa_keyshare_key_id(struct Handle share, struct tss_buffer *buf);
  * `LIB_NULL_PTR` - `share` is null.
  * `LIB_INVALID_HANDLE` - `share` is invalid.
  */
-lib_error mldsa_keyshare_free(const struct Handle *share);
+mldsa_lib_error mldsa_keyshare_free(const struct Handle *share);
 
 /*
  Extract the key id from an encoded setup message.
@@ -364,7 +380,50 @@ lib_error mldsa_keyshare_free(const struct Handle *share);
  * `LIB_NULL_PTR` - `setup` or `key_id` is null.
  * `LIB_UNKNOWN_ERROR` - `setup` is malformed.
  */
-lib_error mldsa_decode_key_id(const struct go_slice *setup, struct tss_buffer *key_id);
+mldsa_lib_error mldsa_decode_key_id(const struct go_slice *setup, struct tss_buffer *key_id);
+
+/*
+ Extract the embedded setup message payload.
+
+ # Arguments
+
+ * `setup` - Encoded setup message.
+ * `message` - Output buffer for the message payload (empty if not
+   present).
+
+ # Returns
+
+ * `LIB_OK` on success, otherwise an error code.
+
+ # Errors
+
+ * `LIB_NULL_PTR` - `setup` or `message` is null.
+ * `LIB_UNKNOWN_ERROR` - `setup` is malformed.
+ */
+mldsa_lib_error mldsa_decode_message(const struct go_slice *setup, struct tss_buffer *message);
+
+/*
+ Extract a party identifier by index from an encoded setup message.
+
+ # Arguments
+
+ * `setup` - Encoded setup message.
+ * `index` - Participant index to resolve.
+ * `message` - Output buffer for the party identifier (empty if the
+   index is out of range).
+
+ # Returns
+
+ * `LIB_OK` on success, otherwise an error code.
+
+ # Errors
+
+ * `LIB_NULL_PTR` - `setup` or `message` is null.
+ * `LIB_UNKNOWN_ERROR` - `setup` is malformed.
+ */
+mldsa_lib_error mldsa_decode_party_name(const struct go_slice *setup,
+                                        uint32_t index,
+                                        struct tss_buffer *message);
 
 /*
  Generate a signing setup message.
@@ -389,11 +448,12 @@ lib_error mldsa_decode_key_id(const struct go_slice *setup, struct tss_buffer *k
  * `LIB_INVALID_DERIVATION_PATH_STR` - `chain_path` is not valid UTF-8.
  * `LIB_DERIVATION_ERROR` - Invalid derivation path.
  */
-lib_error mldsa_sign_setupmsg_new(const struct go_slice *key_id,
-                                  const struct go_slice *chain_path,
-                                  const struct go_slice *message_hash,
-                                  const struct go_slice *ids,
-                                  struct tss_buffer *setup_msg);
+mldsa_lib_error mldsa_sign_setupmsg_new(enum MldsaSecurityLevel level,
+                                        const struct go_slice *key_id,
+                                        const struct go_slice *chain_path,
+                                        const struct go_slice *message_hash,
+                                        const struct go_slice *ids,
+                                        struct tss_buffer *setup_msg);
 
 /*
  Create a signing session from an encoded setup message.
@@ -423,10 +483,11 @@ lib_error mldsa_sign_setupmsg_new(const struct go_slice *key_id,
  * `LIB_SETUP_MESSAGE_VALIDATION` - Setup message validation failed.
 
  */
-lib_error mldsa_sign_session_from_setup(const struct go_slice *setup,
-                                        const struct go_slice *id,
-                                        struct Handle share,
-                                        struct Handle *hnd);
+mldsa_lib_error mldsa_sign_session_from_setup(enum MldsaSecurityLevel level,
+                                              const struct go_slice *setup,
+                                              const struct go_slice *id,
+                                              struct Handle share,
+                                              struct Handle *hnd);
 
 /*
  Apply an inbound message to a signing session.
@@ -448,9 +509,9 @@ lib_error mldsa_sign_session_from_setup(const struct go_slice *setup,
  * `LIB_INVALID_HANDLE_TYPE` - `session` has the wrong type.
  * `LIB_INVALID_SESSION_STATE` - Session mutex is poisoned.
  */
-lib_error mldsa_sign_session_input_message(struct Handle session,
-                                           const struct go_slice *message,
-                                           int32_t *finished);
+mldsa_lib_error mldsa_sign_session_input_message(struct Handle session,
+                                                 const struct go_slice *message,
+                                                 int32_t *finished);
 
 /*
  Fetch the next outbound message from a signing session.
@@ -474,7 +535,8 @@ lib_error mldsa_sign_session_input_message(struct Handle session,
  * `LIB_INVALID_SESSION_STATE` - Session mutex is poisoned.
 
  */
-lib_error mldsa_sign_session_output_message(struct Handle session, struct tss_buffer *message);
+mldsa_lib_error mldsa_sign_session_output_message(struct Handle session,
+                                                  struct tss_buffer *message);
 
 /*
  Resolve the receiver for a message index.
@@ -500,10 +562,10 @@ lib_error mldsa_sign_session_output_message(struct Handle session, struct tss_bu
  * `LIB_INVALID_HANDLE` - `session` is invalid.
  * `LIB_INVALID_HANDLE_TYPE` - `session` has the wrong type.
  */
-lib_error mldsa_sign_session_message_receiver(struct Handle session,
-                                              const struct go_slice *message,
-                                              uint32_t index,
-                                              struct tss_buffer *receiver);
+mldsa_lib_error mldsa_sign_session_message_receiver(struct Handle session,
+                                                    const struct go_slice *message,
+                                                    uint32_t index,
+                                                    struct tss_buffer *receiver);
 
 /*
  Finish the session and collect the generated key share.
@@ -535,7 +597,7 @@ lib_error mldsa_sign_session_message_receiver(struct Handle session,
  * `LIB_KEYGEN_ERROR` - Key generation failed.
 
  */
-lib_error mldsa_sign_session_finish(struct Handle session, struct tss_buffer *output);
+mldsa_lib_error mldsa_sign_session_finish(struct Handle session, struct tss_buffer *output);
 
 /*
  Deallocate a keygen session handle and associated memory.
@@ -556,10 +618,14 @@ lib_error mldsa_sign_session_finish(struct Handle session, struct tss_buffer *ou
  * `LIB_HANDLE_IN_USE` - The session is currently checked out.
 
  */
-lib_error mldsa_sign_session_free(struct Handle session);
+mldsa_lib_error mldsa_sign_session_free(struct Handle session);
 
 #ifdef __cplusplus
 }  // extern "C"
+#endif  // __cplusplus
+
+#ifdef __cplusplus
+}  // namespace mldsa
 #endif  // __cplusplus
 
 #endif  /* _VS_MLDSA_CORE_H */
