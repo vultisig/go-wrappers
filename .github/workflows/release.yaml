@@ -83,6 +83,38 @@ jobs:
             "${ASSETS[@]}" \
             --clobber
 
+      - name: Write release notes
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          cat > release-notes.md << 'NOTES'
+          Pre-compiled TSS libraries for Go.
+
+          ## Platform Support
+
+          | Platform | Architecture | Status |
+          |----------|-------------|--------|
+          | Linux | amd64 (x86_64) | ✅ Supported |
+          | Linux | arm64 (aarch64) | ✅ Supported |
+          | macOS | arm64 (Apple Silicon) | ✅ Supported |
+          | Android | arm64/armv7 | ✅ Available (if mobile build exists) |
+          | iOS | arm64 | ✅ Available (if mobile build exists) |
+
+          ## Usage
+
+          Download the appropriate archive for your platform and extract to your project or system library path.
+
+          ```bash
+          # Linux amd64
+          tar -xzf go-wrappers-linux-amd64.tar.gz -C /usr/local/lib/dkls
+
+          # Linux arm64
+          tar -xzf go-wrappers-linux-arm64.tar.gz -C /usr/local/lib/dkls
+
+          # macOS arm64
+          tar -xzf go-wrappers-darwin-arm64.tar.gz -C /usr/local/lib/dkls
+          ```
+          NOTES
+
       - name: Upload Assets (Manual)
         if: github.event_name == 'workflow_dispatch'
         env:
@@ -95,38 +127,10 @@ jobs:
           )
           [ -f go-wrappers-mobile-android.tar.gz ] && ASSETS+=(go-wrappers-mobile-android.tar.gz)
           [ -f go-wrappers-mobile-ios.tar.gz ] && ASSETS+=(go-wrappers-mobile-ios.tar.gz)
-          # Create release if it doesn't exist
           gh release create ${{ inputs.tag }} \
             "${ASSETS[@]}" \
             --title "Go Wrappers ${{ inputs.tag }}" \
-            --notes "Pre-compiled TSS libraries for Go.
-
-## Platform Support
-
-| Platform | Architecture | Status |
-|----------|-------------|--------|
-| Linux | amd64 (x86_64) | ✅ Supported |
-| Linux | arm64 (aarch64) | ✅ Supported |
-| macOS | arm64 (Apple Silicon) | ✅ Supported |
-| macOS | amd64 (Intel) | ❌ Not yet available |
-| Android | arm64/armv7 | ✅ Available (if mobile build exists) |
-| iOS | arm64 | ✅ Available (if mobile build exists) |
-
-## Usage
-
-Download the appropriate archive for your platform and extract to your project or system library path.
-
-\`\`\`bash
-# Linux amd64
-tar -xzf go-wrappers-linux-amd64.tar.gz -C /usr/local/lib/dkls
-
-# Linux arm64
-tar -xzf go-wrappers-linux-arm64.tar.gz -C /usr/local/lib/dkls
-
-# macOS arm64
-tar -xzf go-wrappers-darwin-arm64.tar.gz -C /usr/local/lib/dkls
-\`\`\`
-" \
+            --notes-file release-notes.md \
             || gh release upload ${{ inputs.tag }} \
               "${ASSETS[@]}" \
               --clobber
