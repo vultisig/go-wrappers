@@ -1,0 +1,8 @@
+framework module "Godkls" {
+	header "ref.h"
+    header "Session.objc.h"
+    header "Universe.objc.h"
+    header "Godkls.h"
+
+    export *
+}

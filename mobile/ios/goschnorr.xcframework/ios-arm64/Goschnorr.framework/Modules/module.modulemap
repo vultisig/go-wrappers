@@ -1,0 +1,8 @@
+framework module "Goschnorr" {
+	header "ref.h"
+    header "Session.objc.h"
+    header "Universe.objc.h"
+    header "Goschnorr.h"
+
+    export *
+}

@@ -1,6 +1,6 @@
 module github.com/vultisig/go-wrappers
 
-go 1.25
+go 1.25.0
 
 require (
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22
