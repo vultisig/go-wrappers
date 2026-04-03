@@ -1,3 +1,8 @@
 .devenv
 .idea
 .DS_Store
+
+# Mobile build artifacts (built locally, published as release assets)
+mobile/android/*.aar
+mobile/android/*.jar
+mobile/ios/*.xcframework

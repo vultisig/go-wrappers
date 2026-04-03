@@ -48,15 +48,39 @@ jobs:
           tar -czvf ../go-wrappers-darwin-arm64.tar.gz darwin/ go-dkls.h go-schnorr.h
           echo "Created go-wrappers-darwin-arm64.tar.gz"
 
+      - name: Package mobile Android libraries
+        run: |
+          if ls mobile/android/*.aar 1>/dev/null 2>&1; then
+            tar -czvf go-wrappers-mobile-android.tar.gz -C mobile/android .
+            echo "Created go-wrappers-mobile-android.tar.gz"
+          else
+            echo "No Android .aar files found in mobile/android/ — skipping"
+          fi
+
+      - name: Package mobile iOS libraries
+        run: |
+          if ls mobile/ios/*.xcframework 1>/dev/null 2>&1; then
+            tar -czvf go-wrappers-mobile-ios.tar.gz -C mobile/ios .
+            echo "Created go-wrappers-mobile-ios.tar.gz"
+          else
+            echo "No iOS .xcframework bundles found in mobile/ios/ — skipping"
+          fi
+
       - name: Upload Release Assets
         if: github.event_name == 'release'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          ASSETS=(
+            go-wrappers-linux-amd64.tar.gz
+            go-wrappers-linux-arm64.tar.gz
+            go-wrappers-darwin-arm64.tar.gz
+          )
+          # Include mobile assets if they were built
+          [ -f go-wrappers-mobile-android.tar.gz ] && ASSETS+=(go-wrappers-mobile-android.tar.gz)
+          [ -f go-wrappers-mobile-ios.tar.gz ] && ASSETS+=(go-wrappers-mobile-ios.tar.gz)
           gh release upload ${{ github.event.release.tag_name }} \
-            go-wrappers-linux-amd64.tar.gz \
-            go-wrappers-linux-arm64.tar.gz \
-            go-wrappers-darwin-arm64.tar.gz \
+            "${ASSETS[@]}" \
             --clobber
 
       - name: Upload Assets (Manual)
@@ -64,11 +88,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          ASSETS=(
+            go-wrappers-linux-amd64.tar.gz
+            go-wrappers-linux-arm64.tar.gz
+            go-wrappers-darwin-arm64.tar.gz
+          )
+          [ -f go-wrappers-mobile-android.tar.gz ] && ASSETS+=(go-wrappers-mobile-android.tar.gz)
+          [ -f go-wrappers-mobile-ios.tar.gz ] && ASSETS+=(go-wrappers-mobile-ios.tar.gz)
           # Create release if it doesn't exist
           gh release create ${{ inputs.tag }} \
-            go-wrappers-linux-amd64.tar.gz \
-            go-wrappers-linux-arm64.tar.gz \
-            go-wrappers-darwin-arm64.tar.gz \
+            "${ASSETS[@]}" \
             --title "Go Wrappers ${{ inputs.tag }}" \
             --notes "Pre-compiled TSS libraries for Go.
 
@@ -80,6 +109,8 @@ jobs:
 | Linux | arm64 (aarch64) | ✅ Supported |
 | macOS | arm64 (Apple Silicon) | ✅ Supported |
 | macOS | amd64 (Intel) | ❌ Not yet available |
+| Android | arm64/armv7 | ✅ Available (if mobile build exists) |
+| iOS | arm64 | ✅ Available (if mobile build exists) |
 
 ## Usage
 
@@ -97,7 +128,5 @@ tar -xzf go-wrappers-darwin-arm64.tar.gz -C /usr/local/lib/dkls
 \`\`\`
 " \
             || gh release upload ${{ inputs.tag }} \
-              go-wrappers-linux-amd64.tar.gz \
-              go-wrappers-linux-arm64.tar.gz \
-              go-wrappers-darwin-arm64.tar.gz \
+              "${ASSETS[@]}" \
               --clobber

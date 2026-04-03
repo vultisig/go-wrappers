@@ -58,6 +58,50 @@ import (
 )
 ```
 
+## Mobile Binaries
+
+Pre-built mobile binaries (`.aar` for Android, `.xcframework` for iOS) can be
+produced from the Go packages using `gomobile bind`.
+
+### Who needs this
+
+Downstream mobile apps (vultisig-ios, vultiagent-app, vultisig-sdk) that
+integrate TSS signing need these binaries. Instead of committing them into each
+consuming repo, they are built here and published as release assets.
+
+### Prerequisites
+
+- Go 1.22+
+- `gomobile`: `go install golang.org/x/mobile/cmd/gomobile@latest && gomobile init`
+- **Android**: Android SDK + NDK (`ANDROID_HOME` set, `sdkmanager "ndk-bundle"`)
+- **iOS**: macOS with Xcode and command-line tools
+
+### Build
+
+```bash
+make mobile          # Both platforms
+make mobile-android  # Android .aar only
+make mobile-ios      # iOS .xcframework only
+make mobile-clean    # Remove build artifacts
+```
+
+Outputs go into `mobile/android/` and `mobile/ios/`. See
+[BUILD-MOBILE.md](BUILD-MOBILE.md) for detailed instructions and CGO
+troubleshooting.
+
+### Consuming from releases
+
+Download the mobile archives from the
+[releases page](https://github.com/vultisig/go-wrappers/releases):
+
+```bash
+# Android
+wget https://github.com/vultisig/go-wrappers/releases/latest/download/go-wrappers-mobile-android.tar.gz
+
+# iOS
+wget https://github.com/vultisig/go-wrappers/releases/latest/download/go-wrappers-mobile-ios.tar.gz
+```
+
 ## Building from Source (Rust)
 
 The native libraries are built from the Rust implementations:
